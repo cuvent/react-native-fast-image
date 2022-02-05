@@ -49,3 +49,5 @@ coverage
 
 # TypeScript incremental compilation cache
 *.tsbuildinfo
+
+ReactNativeFastImageExampleServer/catswap-cdn.sh

@@ -23,26 +23,23 @@ public class SharedOkHttpClient {
                         new File(context.getCacheDir(), "http_cache"),
                         50L * 1024L * 1024L // 50 MiB
                 ))
+                // Add an interceptor that will keep our etag up2date
                 .addInterceptor(chain -> {
                     Request request = chain.request();
-                    String url = request.url().toString();
 
-                    // add etag to request if set
-                    String prevEtag = ObjectBox.getEtagByUrl(url);
-//                    if (prevEtag != null) {
-//                        request = request.newBuilder()
-//                                .header("If-None-Match", prevEtag)
-//                                .build();
-//                        Log.d("HannoDebug", "We added the etag to the header with" + prevEtag);
-//                    }
-
+                    // Note: we don't add the the etag to the request
+                    //       Cache invalidation is handled on Glides signature level
+                    //       (See FastImageViewManager)
                     Response response = chain.proceed(request);
+
+                    String url = request.url().toString();
+                    String prevEtag = ObjectBox.getEtagByUrl(url);
+
 
                     // update etag if changes
                     String responseEtag = response.header("etag");
                     if (responseEtag != null && !responseEtag.equals(prevEtag)) {
                         ObjectBox.putOrUpdateEtag(url, responseEtag);
-                        Log.d("HannoDebug", "We updated the etag from " + prevEtag + " -> " + responseEtag);
                     }
 
                     return response;

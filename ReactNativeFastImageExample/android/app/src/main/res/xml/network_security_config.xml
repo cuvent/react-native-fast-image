@@ -15,7 +15,7 @@
 
     <domain-config>
         <!-- Make sure your URL Server here -->
-        <domain includeSubdomains="true">192.168.178.78</domain>
+        <domain includeSubdomains="true">s3.nl-ams.scw.cloud</domain>
         <trust-anchors>
             <certificates src="user"/>
             <certificates src="system"/>
