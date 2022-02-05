@@ -85,7 +85,6 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
             return;
         }
 
-        //final GlideUrl glideUrl = FastImageViewConverter.getGlideUrl(view.getContext(), source);
         final FastImageSource imageSource = FastImageViewConverter.getImageSource(view.getContext(), source);
         if (imageSource.getUri().toString().length() == 0) {
             ThemedReactContext context = (ThemedReactContext) view.getContext();
@@ -116,11 +115,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         final FastImageSource imageSource = FastImageViewConverter.getImageSource(view.getContext(), source);
         final GlideUrl glideUrl = imageSource.getGlideUrl();
 
-        // Cancel existing request.
         view.glideUrl = glideUrl;
-//        if (requestManager != null) {
-//            requestManager.clear(view);
-//        }
 
         final String key = glideUrl.toStringUrl();
         FastImageOkHttpProgressGlideModule.expect(key, this);
@@ -160,11 +155,10 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
     }
 
     /**
-     * @param view
-     * @param url
-     * @param options Optional
-     * @param key     Optional, when set it will emit events
-     */
+     * This will make a head request to the URL to get the ETAG.
+     * The request is then forwarded to glide, which uses the
+     * ETAG as signature, see {@link #loadImageWithSignature}.
+     **/
     private void loadImage(final FastImageViewWithUrl view, final String url, @Nullable final RequestOptions options, final @Nullable String key) {
         String prevEtag = ObjectBox.getEtagByUrl(url);
 
@@ -186,6 +180,14 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         });
     }
 
+    /**
+     * This loads the actual image either from server or from cache
+     * depending on whether a cache entry for the given signature
+     * exists yet.
+     * If a prev signature is passed it will show the image for the
+     * url + prevSignature as long as the new image from the url (with
+     * the new signature) is being loaded.
+     */
     private void loadImageWithSignature(
             final FastImageViewWithUrl view,
             final String url,
@@ -199,6 +201,9 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
                 Log.e(FastImageViewManager.class.getSimpleName(), "Can't refresh as requestManager was null!");
                 return;
             }
+
+            // cancel any previous requests
+            requestManager.clear(view);
 
             // Request the new image
             RequestBuilder<Drawable> imageRequest = requestManager
