@@ -223,6 +223,7 @@ export default class FastImage extends React.PureComponent<FastImageProps, FastI
     static resizeMode = resizeMode
     static cacheControl = cacheControl
     static preload = (sources: Source[]) => FastImageViewNativeModule.preload(sources)
+    static preloadDimension = (source: Source) => FastImageViewNativeModule.preloadDimension(source)
     static displayName = 'FastImage'
 
     private fastImageRef: React.RefObject<FastImage | undefined>

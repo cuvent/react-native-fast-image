@@ -71,6 +71,7 @@ This fast-image fork comes with a few more features:
 - [x] ETag support
 - [x] Antialiasing for borderRadius on Android
 - [x] A bit faster re-renders
+- [x] preload dimensoin image
 
 ## Installation
 
@@ -251,6 +252,19 @@ FastImage.preload([
         headers: { Authorization: 'someAuthToken' },
     },
 ])
+```
+
+### `FastImage.preloadDimension: (source) => Promise<void>`
+
+Preload image to display later with width and height (android only). e.g.
+
+```js
+FastImage.preloadDimension({
+    uri: 'https://facebook.github.io/react/img/logo_og.png',
+    headers: { Authorization: 'someAuthToken' },
+}).then((w, h) => {
+	console.log('w, h', w, h)
+})
 ```
 
 ### `FastImage.clearMemoryCache: () => Promise<void>`
