@@ -1,5 +1,5 @@
 import React from 'react'
-import FastImage from '@cuvent/react-native-fast-image'
+import FastImage from '@valery-lavrik/react-native-fast-image'
 import { ImageGrid } from './ImageGrid'
 
 // @ts-ignore

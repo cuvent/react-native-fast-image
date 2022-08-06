@@ -78,8 +78,8 @@ This fast-image fork comes with a few more features:
 **Note: You must be using React Native 0.60.0 or higher to use the most recent version of `react-native-fast-image`.**
 
 ```bash
-yarn add @cuvent/react-native-fast-image
-// OR: npm i @cuvent/react-native-fast-image
+yarn add @valery-lavrik/react-native-fast-image
+// OR: npm i @valery-lavrik/react-native-fast-image
 ```
 
 ### Extra step for android
@@ -105,7 +105,7 @@ public class MainApplication extends Application implements ReactApplication {
 ## Usage
 
 ```jsx
-import FastImage from '@cuvent/react-native-fast-image'
+import FastImage from '@valery-lavrik/react-native-fast-image'
 
 const YourImage = () => (
     <FastImage
