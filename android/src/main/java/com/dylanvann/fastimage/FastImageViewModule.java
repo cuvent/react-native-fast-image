@@ -11,10 +11,18 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.views.imagehelper.ImageSource;
+import com.bumptech.glide.request.RequestListener;
+import android.graphics.drawable.Drawable;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 
 class FastImageViewModule extends ReactContextBaseJavaModule {
 
     private static final String REACT_CLASS = "FastImageView";
+    private static final String ERROR_LOAD_FAILED = "ERROR_LOAD_FAILED";
 
     FastImageViewModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -54,6 +62,51 @@ class FastImageViewModule extends ReactContextBaseJavaModule {
             }
         });
     }
+
+	@ReactMethod
+    public void preloadDimension(final ReadableMap source, final Promise promise) {
+        final Activity activity = getCurrentActivity();
+        if (activity == null) return;
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final FastImageSource imageSource = FastImageViewConverter.getImageSource(activity, source);
+                final GlideUrl glideUrl = imageSource.getGlideUrl();
+
+                if (glideUrl == null) {
+                    promise.resolve(null);
+                    return;
+                }
+
+                Glide
+					.with(activity.getApplicationContext())
+					.load(glideUrl)
+					.apply(FastImageViewConverter.getOptions(activity, imageSource,  source))
+					.listener(new RequestListener<Drawable>() {
+						@Override
+						public boolean onLoadFailed(GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+							promise.reject(ERROR_LOAD_FAILED, e);
+							return false;
+						}
+
+						@Override
+						public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+
+							WritableMap params = Arguments.createMap();
+							params.putInt("width", resource.getIntrinsicWidth());
+							params.putInt("height", resource.getIntrinsicHeight()); 
+							promise.resolve(params);
+
+							return false;
+						}
+					})
+					.preload();
+
+            }
+        });
+	}
+
 
     @ReactMethod
     public void clearMemoryCache(final Promise promise) {

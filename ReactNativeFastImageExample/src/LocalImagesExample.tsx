@@ -9,7 +9,7 @@ import {
 import FastImage, {
     FastImageProps,
     Source,
-} from '@cuvent/react-native-fast-image'
+} from '@valery-lavrik/react-native-fast-image'
 import Section from './Section'
 import FeatureText from './FeatureText'
 import FieldsBase64 from './images/fields'

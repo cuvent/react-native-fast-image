@@ -1,6 +1,6 @@
 import { Button, Dimensions, StatusBar, StyleSheet, View } from 'react-native'
 import React, { useRef } from 'react'
-import FastImage from '@cuvent/react-native-fast-image'
+import FastImage from '@valery-lavrik/react-native-fast-image'
 
 export const ETAGExample = () => {
     const ref = useRef<FastImage>(null)

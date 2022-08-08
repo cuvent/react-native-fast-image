@@ -71,14 +71,15 @@ This fast-image fork comes with a few more features:
 - [x] ETag support
 - [x] Antialiasing for borderRadius on Android
 - [x] A bit faster re-renders
+- [x] preload dimensoin image
 
 ## Installation
 
 **Note: You must be using React Native 0.60.0 or higher to use the most recent version of `react-native-fast-image`.**
 
 ```bash
-yarn add @cuvent/react-native-fast-image
-// OR: npm i @cuvent/react-native-fast-image
+yarn add @valery-lavrik/react-native-fast-image
+// OR: npm i @valery-lavrik/react-native-fast-image
 ```
 
 ### Extra step for android
@@ -104,7 +105,7 @@ public class MainApplication extends Application implements ReactApplication {
 ## Usage
 
 ```jsx
-import FastImage from '@cuvent/react-native-fast-image'
+import FastImage from '@valery-lavrik/react-native-fast-image'
 
 const YourImage = () => (
     <FastImage
@@ -251,6 +252,19 @@ FastImage.preload([
         headers: { Authorization: 'someAuthToken' },
     },
 ])
+```
+
+### `FastImage.preloadDimension: (source) => Promise<void>`
+
+Preload image to display later with width and height (android only). e.g.
+
+```js
+FastImage.preloadDimension({
+    uri: 'https://facebook.github.io/react/img/logo_og.png',
+    headers: { Authorization: 'someAuthToken' },
+}).then((w, h) => {
+	console.log('w, h', w, h)
+})
 ```
 
 ### `FastImage.clearMemoryCache: () => Promise<void>`
