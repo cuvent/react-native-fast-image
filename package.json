@@ -18,7 +18,7 @@
         "url": "https://github.com/valery-lavrik/react-native-fast-image.git"
     },
     "license": "(MIT AND Apache-2.0)",
-    "author": "Dylan Vann <dylan@dylanvann.com> (https://dylanvann.com)",
+    "author": "VLavrik",
     "main": "dist/index.cjs.js",
     "module": "dist/index.js",
     "typings": "dist/index.d.ts",
